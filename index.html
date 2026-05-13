@@ -795,10 +795,14 @@
       btn.classList.add('selected');
     }
 
-    // scroll wheel on the image stage
+    // scroll wheel on the image stage — throttled to one slide per scroll
+    let scrollLocked = false;
     document.getElementById('img-stage').addEventListener('wheel', e => {
       e.preventDefault();
+      if (scrollLocked) return;
+      scrollLocked = true;
       if (e.deltaY > 0) nextImg(); else prevImg();
+      setTimeout(() => { scrollLocked = false; }, 650); // match transition duration
     }, { passive: false });
   </script>
 
