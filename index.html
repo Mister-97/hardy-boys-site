@@ -488,7 +488,7 @@
 
         <!-- image counter -->
         <div style="margin-top:auto;padding-top:1.5rem;display:flex;align-items:center;gap:.6rem;">
-          <span id="img-counter" style="font-family:'Montserrat',sans-serif;font-weight:700;font-size:.65rem;letter-spacing:.2em;color:rgba(200,169,110,.5);">01 / 09</span>
+          <span id="img-counter" style="font-family:'Montserrat',sans-serif;font-weight:700;font-size:.65rem;letter-spacing:.2em;color:rgba(200,169,110,.5);">01 / 11</span>
           <div style="flex:1;height:1px;background:rgba(237,232,223,.08);"></div>
           <button onclick="prevImg()" style="background:none;border:1px solid rgba(237,232,223,.1);color:rgba(237,232,223,.4);width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:border-color .2s,color .2s;" onmouseenter="this.style.borderColor='rgba(200,169,110,.5)';this.style.color='#E8D5A0'" onmouseleave="this.style.borderColor='rgba(237,232,223,.1)';this.style.color='rgba(237,232,223,.4)'">
             <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 15l-6-6-6 6"/></svg>
@@ -502,8 +502,10 @@
       <!-- CENTER: scrollable image -->
       <div id="img-stage" style="position:relative;overflow:hidden;background:#0d0d0a;border-right:1px solid rgba(237,232,223,.06);">
         <div id="img-slider" style="position:absolute;top:0;left:0;width:100%;transition:top .55s cubic-bezier(.77,0,.18,1);">
-          <div class="img-slide"><img src="https://hardyboys.vn/wp-content/uploads/2026/01/vn-11134207-7ras8-m3m5735q4xlt2d.jpeg" alt="HDB Raw Denim Jacket V2 - 1" style="width:100%;height:100vh;object-fit:cover;display:block;"/></div>
-          <div class="img-slide"><img src="https://hardyboys.vn/wp-content/uploads/2026/01/vn-11134207-7ras8-m3m5735q6c692f.jpeg" alt="HDB Raw Denim Jacket V2 - 2" style="width:100%;height:100vh;object-fit:cover;display:block;"/></div>
+          <div class="img-slide"><img src="model-standing.png" alt="HDB Raw Denim Jacket V2 - Standing" style="width:100%;height:100vh;object-fit:cover;object-position:top center;display:block;"/></div>
+          <div class="img-slide"><img src="model-crouching.png" alt="HDB Raw Denim Jacket V2 - Crouching" style="width:100%;height:100vh;object-fit:cover;object-position:top center;display:block;"/></div>
+          <div class="img-slide"><img src="https://hardyboys.vn/wp-content/uploads/2026/01/vn-11134207-7ras8-m3m5735q4xlt2d.jpeg" alt="HDB Raw Denim Jacket V2 - 3" style="width:100%;height:100vh;object-fit:cover;display:block;"/></div>
+          <div class="img-slide"><img src="https://hardyboys.vn/wp-content/uploads/2026/01/vn-11134207-7ras8-m3m5735q6c692f.jpeg" alt="HDB Raw Denim Jacket V2 - 4" style="width:100%;height:100vh;object-fit:cover;display:block;"/></div>
           <div class="img-slide"><img src="https://hardyboys.vn/wp-content/uploads/2026/01/vn-11134207-7ras8-m3m5734c5k4h65.jpeg" alt="HDB Raw Denim Jacket V2 - 3" style="width:100%;height:100vh;object-fit:cover;display:block;"/></div>
           <div class="img-slide"><img src="https://hardyboys.vn/wp-content/uploads/2026/01/vn-11134207-7ras8-m3m573425z988c.jpeg" alt="HDB Raw Denim Jacket V2 - 4" style="width:100%;height:100vh;object-fit:cover;display:block;"/></div>
           <div class="img-slide"><img src="https://hardyboys.vn/wp-content/uploads/2026/01/vn-11134207-7ras8-m3m5733i6rz5fc.jpeg" alt="HDB Raw Denim Jacket V2 - 5" style="width:100%;height:100vh;object-fit:cover;display:block;"/></div>
@@ -524,6 +526,8 @@
           <div class="img-dot" onclick="goImg(6)"></div>
           <div class="img-dot" onclick="goImg(7)"></div>
           <div class="img-dot" onclick="goImg(8)"></div>
+          <div class="img-dot" onclick="goImg(9)"></div>
+          <div class="img-dot" onclick="goImg(10)"></div>
         </div>
       </div>
 
@@ -774,7 +778,7 @@
 
     // ── image slider ──
     let imgIndex = 0;
-    const totalImgs = 9;
+    const totalImgs = 11;
     const slider  = document.getElementById('img-slider');
     const counter = document.getElementById('img-counter');
     const dots    = document.querySelectorAll('.img-dot');
