@@ -85,11 +85,39 @@
       position: fixed; inset: 0; z-index: 10;
       display: flex; flex-direction: column;
       padding: clamp(1.25rem, 3vw, 2.5rem) clamp(1.5rem, 4vw, 3.5rem);
+      padding-top: 20vh;
       justify-content: center;
     }
 
     /* ── top section: logo + title ── */
-    .title-block { max-width: 480px; }
+    .title-block { max-width: 480px; position: relative; }
+
+    .crosshair-svg {
+      position: absolute;
+      pointer-events: none;
+      color: rgba(200,169,110,.22);
+      z-index: 0;
+      opacity: 0;
+      isolation: isolate;
+      transform-origin: center;
+      animation: crosshair-seek 2.8s cubic-bezier(.4,0,.2,1) 1.2s forwards,
+                 crosshair-idle 9s ease-in-out 4.2s infinite;
+    }
+    @keyframes crosshair-seek {
+      0%   { opacity: 0;   transform: translate(-4rem, 2.5rem) rotate(-25deg); }
+      12%  { opacity: .55; }
+      30%  { transform: translate(2.5rem, -1.5rem) rotate(18deg); opacity: .65; }
+      52%  { transform: translate(-1.2rem, 1rem) rotate(-8deg); opacity: .75; }
+      72%  { transform: translate(.6rem, -.4rem) rotate(4deg); opacity: .85; }
+      88%  { transform: translate(0, 0) rotate(0deg); opacity: .9; }
+      100% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+    }
+    @keyframes crosshair-idle {
+      0%, 100% { transform: rotate(0deg)   scale(1); }
+      25%       { transform: rotate(2.5deg) scale(1.01); }
+      75%       { transform: rotate(-2deg)  scale(.99); }
+    }
+    .game-title { position: relative; z-index: 1; }
 
     /* oval emblem */
     .emblem {
@@ -126,7 +154,8 @@
       animation: fadeUp .9s ease .4s forwards;
     }
 
-    .game-title .brand-of { display: block; font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: .42em; letter-spacing: -.02em; text-transform: uppercase; color: rgba(240,232,216,.65); margin-bottom: .05em; }
+    .game-title .brand-of { display: block; font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: .42em; letter-spacing: -.03em; text-transform: uppercase; color: rgba(240,232,216,.65); margin-bottom: 0; }
+    .game-title .brand-main { display: block; letter-spacing: -.03em; margin-left: -.03em; }
     .game-title .brand-sub { display: block; font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: .17em; letter-spacing: .3em; text-transform: uppercase; color: rgba(200,169,110,.6); margin-top: .55em; }
 
     /* ornamental divider */
@@ -154,8 +183,13 @@
 
     /* ── center-left: game menu ── */
     .menu-block {
-      display: flex; flex-direction: column; gap: 0;
-      padding-top: 1.5rem;
+      display: flex; flex-direction: column; gap: .1rem;
+      padding-top: .75rem;
+    }
+    .menu-divider {
+      width: 2.5rem; height: 1px;
+      background: rgba(200,169,110,.2);
+      margin: .6rem 1rem;
     }
 
     /* push bottom strip to very bottom */
@@ -356,27 +390,26 @@
     <!-- TOP: title block -->
     <div class="title-block">
 
-      <div class="emblem">
-        <div class="emblem-line"></div>
-        <span class="emblem-text">Saigon Street Culture</span>
-        <div class="emblem-line" style="background:linear-gradient(to left,rgba(200,169,110,.6),transparent);"></div>
-      </div>
+      <!-- crosshair seeking and locking onto Y in BOYS -->
+      <svg class="crosshair-svg" id="crosshair-aim" style="width:6rem;height:6rem;top:-.8rem;left:10rem;" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="50" r="44" stroke="currentColor" stroke-width="3"/>
+        <circle cx="50" cy="50" r="24" stroke="currentColor" stroke-width="2"/>
+        <line x1="50" y1="4" x2="50" y2="23" stroke="currentColor" stroke-width="3"/>
+        <line x1="50" y1="27" x2="50" y2="32" stroke="currentColor" stroke-width="2"/>
+        <line x1="50" y1="96" x2="50" y2="77" stroke="currentColor" stroke-width="3"/>
+        <line x1="50" y1="73" x2="50" y2="68" stroke="currentColor" stroke-width="2"/>
+        <line x1="4" y1="50" x2="23" y2="50" stroke="currentColor" stroke-width="3"/>
+        <line x1="27" y1="50" x2="32" y2="50" stroke="currentColor" stroke-width="2"/>
+        <line x1="96" y1="50" x2="77" y2="50" stroke="currentColor" stroke-width="3"/>
+        <line x1="73" y1="50" x2="68" y2="50" stroke="currentColor" stroke-width="2"/>
+        <circle cx="50" cy="50" r="4" fill="rgba(200,80,80,.6)"/>
+      </svg>
 
       <h1 class="game-title">
         <span class="brand-of">Hardy</span>
-        Boys
+        <span class="brand-main">Boys</span>
         <span class="brand-sub">Street Fashion</span>
       </h1>
-
-      <div class="ornament">
-        <div class="ornament-line"></div>
-        <div class="ornament-diamond"></div>
-        <span class="ornament-text">Raw Strength · Street Culture · No Compromise</span>
-        <div class="ornament-diamond"></div>
-        <div class="ornament-line" style="background:linear-gradient(to left,rgba(200,169,110,.5),transparent);"></div>
-      </div>
-
-      <p class="tagline">The street remembers what you wore.</p>
     </div>
 
     <!-- MIDDLE: game-style menu -->
@@ -406,6 +439,8 @@
       <div class="menu-item" style="--delay:1.4s;" tabindex="0" data-href="https://hardyboys.vn/archive">
         <span class="menu-item-text">Archive</span>
       </div>
+
+      <div class="menu-divider"></div>
 
       <div class="menu-item" style="--delay:1.55s;" tabindex="0" role="link">
         <span class="menu-item-text" style="font-size:.75em; color:rgba(240,234,216,.32);">Size Charts</span>
@@ -458,86 +493,133 @@
   <!-- ── PRODUCT PAGE ── -->
   <div id="shop-page" style="position:fixed;inset:0;z-index:400;background:#f5f2ed;display:none;overflow:hidden;">
 
-    <!-- three-col layout -->
-    <div style="position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr 1fr;height:100vh;overflow:hidden;">
+    <!-- 4-panel flex layout -->
+    <div style="position:relative;z-index:2;display:flex;height:100vh;overflow:hidden;">
 
-      <!-- LEFT: info -->
-      <div style="position:relative;padding:2.5rem 2rem;display:flex;flex-direction:column;justify-content:center;border-right:1px solid rgba(0,0,0,.08);background:#f5f2ed;">
+      <!-- ══ PANEL 0: STORE MENU ══ -->
+      <div id="sp-menu" style="width:320px;min-width:320px;flex-shrink:0;border-right:1px solid rgba(0,0,0,.08);background:#f5f2ed;display:flex;flex-direction:column;overflow:hidden;transition:width .6s cubic-bezier(.77,0,.18,1),min-width .6s cubic-bezier(.77,0,.18,1),opacity .35s ease;">
 
-        <!-- back button pinned top -->
-        <button id="shop-back" style="position:absolute;top:2.5rem;left:2rem;display:inline-flex;align-items:center;gap:.5rem;background:none;border:none;cursor:pointer;font-family:'Montserrat',sans-serif;font-weight:700;font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(140,100,40,.7);padding:0;transition:color .2s;" onmouseenter="this.style.color='#9a6e28'" onmouseleave="this.style.color='rgba(140,100,40,.7)'">
-          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-          Back
-        </button>
-
-        <!-- centered content block -->
-        <div>
-          <p style="font-family:'Montserrat',sans-serif;font-weight:900;font-size:clamp(1.1rem,2vw,1.6rem);letter-spacing:-.02em;text-transform:uppercase;color:#1a1714;line-height:1.1;margin-bottom:1.2rem;">HDB Raw Denim<br/>Jacket V2</p>
-
-          <ul style="list-style:none;margin-bottom:1.5rem;">
-            <li style="font-family:'Montserrat',sans-serif;font-size:.7rem;color:rgba(26,23,20,.55);letter-spacing:.04em;text-transform:uppercase;padding:.25rem 0;border-bottom:1px solid rgba(0,0,0,.06);display:flex;align-items:center;gap:.5rem;"><span style="color:rgba(140,100,40,.6);">—</span> Raw Denim Construction</li>
-            <li style="font-family:'Montserrat',sans-serif;font-size:.7rem;color:rgba(26,23,20,.55);letter-spacing:.04em;text-transform:uppercase;padding:.25rem 0;border-bottom:1px solid rgba(0,0,0,.06);display:flex;align-items:center;gap:.5rem;"><span style="color:rgba(140,100,40,.6);">—</span> Boxy Streetwear Fit</li>
-            <li style="font-family:'Montserrat',sans-serif;font-size:.7rem;color:rgba(26,23,20,.55);letter-spacing:.04em;text-transform:uppercase;padding:.25rem 0;border-bottom:1px solid rgba(0,0,0,.06);display:flex;align-items:center;gap:.5rem;"><span style="color:rgba(140,100,40,.6);">—</span> Minimal Wash — Shape Retention</li>
-            <li style="font-family:'Montserrat',sans-serif;font-size:.7rem;color:rgba(26,23,20,.55);letter-spacing:.04em;text-transform:uppercase;padding:.25rem 0;border-bottom:1px solid rgba(0,0,0,.06);display:flex;align-items:center;gap:.5rem;"><span style="color:rgba(140,100,40,.6);">—</span> Pairs With Tees, Hoodies, Denim</li>
-            <li style="font-family:'Montserrat',sans-serif;font-size:.7rem;color:rgba(26,23,20,.55);letter-spacing:.04em;text-transform:uppercase;padding:.25rem 0;display:flex;align-items:center;gap:.5rem;"><span style="color:rgba(140,100,40,.6);">—</span> True To Size</li>
-          </ul>
-
-          <p style="font-family:'Montserrat',sans-serif;font-size:.75rem;color:rgba(26,23,20,.4);line-height:1.8;letter-spacing:.02em;">
-            Form denim mộc đứng phom, phong cách streetwear tối giản. Durable raw denim with a stiff feel that breaks in over time — every wear makes it yours.
-          </p>
+        <!-- menu header -->
+        <div style="padding:1rem 1.4rem;border-bottom:1px solid rgba(0,0,0,.06);flex-shrink:0;display:flex;align-items:center;justify-content:space-between;">
+          <button id="shop-back" style="display:inline-flex;align-items:center;gap:.5rem;background:none;border:none;cursor:pointer;font-family:'Montserrat',sans-serif;font-weight:700;font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(140,100,40,.7);padding:0;transition:color .2s;" onmouseenter="this.style.color='#9a6e28'" onmouseleave="this.style.color='rgba(140,100,40,.7)'">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            Back
+          </button>
+          <span style="font-family:'Montserrat',sans-serif;font-size:.52rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:rgba(26,23,20,.25);">Hardy Boys</span>
         </div>
 
-        <!-- image counter pinned bottom -->
-        <div style="position:absolute;bottom:2rem;left:2rem;right:2rem;display:flex;align-items:center;gap:.6rem;">
-          <span id="img-counter" style="font-family:'Montserrat',sans-serif;font-weight:700;font-size:.65rem;letter-spacing:.2em;color:rgba(140,100,40,.6);">01 / 11</span>
-          <div style="flex:1;height:1px;background:rgba(0,0,0,.1);"></div>
-          <button onclick="prevImg()" style="background:none;border:1px solid rgba(0,0,0,.12);color:rgba(26,23,20,.4);width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:border-color .2s,color .2s;" onmouseenter="this.style.borderColor='rgba(140,100,40,.5)';this.style.color='#9a6e28'" onmouseleave="this.style.borderColor='rgba(0,0,0,.12)';this.style.color='rgba(26,23,20,.4)'">
-            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 15l-6-6-6 6"/></svg>
-          </button>
-          <button onclick="nextImg()" style="background:none;border:1px solid rgba(0,0,0,.12);color:rgba(26,23,20,.4);width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:border-color .2s,color .2s;" onmouseenter="this.style.borderColor='rgba(140,100,40,.5)';this.style.color='#9a6e28'" onmouseleave="this.style.borderColor='rgba(0,0,0,.12)';this.style.color='rgba(26,23,20,.4)'">
-            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
-          </button>
+        <!-- menu body -->
+        <div style="padding:1.2rem 1.4rem;overflow-y:auto;flex:1;min-width:320px;">
+          <div style="margin-bottom:2rem;">
+            <p style="font-family:'Montserrat',sans-serif;font-size:.55rem;font-weight:900;letter-spacing:.35em;text-transform:uppercase;color:#1a1714;padding-bottom:.55rem;border-bottom:1.5px solid #1a1714;margin-bottom:.8rem;">Tops</p>
+            <button class="sp-menu-item" onclick="">T-Shirts</button>
+            <button class="sp-menu-item" onclick="'SlimFit Tees')">SlimFit Tees</button>
+            <button class="sp-menu-item" onclick="'Polo Shirts')">Polo Shirts</button>
+            <button class="sp-menu-item" onclick="'Hoodies')">Hoodies</button>
+            <button class="sp-menu-item" onclick="'Zip Hoodies')">Zip Hoodies</button>
+            <button class="sp-menu-item" onclick="'Tanktops')">Tanktops</button>
+          </div>
+          <div style="margin-bottom:2rem;">
+            <p style="font-family:'Montserrat',sans-serif;font-size:.55rem;font-weight:900;letter-spacing:.35em;text-transform:uppercase;color:#1a1714;padding-bottom:.55rem;border-bottom:1.5px solid #1a1714;margin-bottom:.8rem;">Bottoms</p>
+            <button class="sp-menu-item" onclick="'Denim Jeans')">Denim Jeans</button>
+            <button class="sp-menu-item" onclick="'Double Knee')">Double Knee</button>
+            <button class="sp-menu-item" onclick="'Shorts')">Shorts</button>
+            <button class="sp-menu-item" onclick="'Jorts')">Jorts</button>
+            <button class="sp-menu-item" onclick="'Sweatpants')">Sweatpants</button>
+          </div>
+          <div style="margin-bottom:2rem;">
+            <p style="font-family:'Montserrat',sans-serif;font-size:.55rem;font-weight:900;letter-spacing:.35em;text-transform:uppercase;color:#1a1714;padding-bottom:.55rem;border-bottom:1.5px solid #1a1714;margin-bottom:.8rem;">Outerwear</p>
+            <button class="sp-menu-item sp-menu-active" onclick="'Denim Jackets')">Denim Jackets</button>
+            <button class="sp-menu-item" onclick="'Canvas Jackets')">Canvas Jackets</button>
+            <button class="sp-menu-item" onclick="'Gilets / Vests')">Gilets / Vests</button>
+          </div>
+          <div>
+            <p style="font-family:'Montserrat',sans-serif;font-size:.55rem;font-weight:900;letter-spacing:.35em;text-transform:uppercase;color:#1a1714;padding-bottom:.55rem;border-bottom:1.5px solid #1a1714;margin-bottom:.8rem;">Accessories</p>
+            <button class="sp-menu-item" onclick="'Caps & Hats')">Caps & Hats</button>
+            <button class="sp-menu-item" onclick="'Socks')">Socks</button>
+            <button class="sp-menu-item" onclick="'Underwear')">Underwear</button>
+          </div>
         </div>
       </div>
+
+      <!-- ══ PANEL 1: PRODUCT INFO ══ -->
+      <div id="sp-info" style="width:520px;min-width:520px;flex-shrink:0;border-right:1px solid rgba(0,0,0,.08);background:#f5f2ed;display:flex;flex-direction:column;overflow:hidden;opacity:1;transition:width .6s cubic-bezier(.77,0,.18,1),min-width .6s cubic-bezier(.77,0,.18,1),opacity .4s ease .15s;">
+        <div style="min-width:500px;overflow-y:auto;flex:1;">
+        <div style="padding:2rem 2rem 2.5rem;">
+
+          <!-- Back button — only visible in product state -->
+          <div id="sp-info-back" style="display:none;margin-bottom:1.6rem;">
+            <button onclick="closeProductPanel()" style="display:inline-flex;align-items:center;gap:.5rem;background:none;border:none;cursor:pointer;font-family:'Montserrat',sans-serif;font-weight:700;font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(140,100,40,.7);padding:0;transition:color .2s;" onmouseenter="this.style.color='#9a6e28'" onmouseleave="this.style.color='rgba(140,100,40,.7)'">
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+              Back
+            </button>
+          </div>
+
+          <!-- Category heading — always visible -->
+          <p style="font-family:'Montserrat',sans-serif;font-weight:900;font-size:clamp(2.2rem,4vw,3.4rem);letter-spacing:-.03em;text-transform:uppercase;color:#1a1714;line-height:.92;margin-bottom:1.8rem;">Denim<br/>Jackets</p>
+
+          <!-- Collapsible product details — hidden until image clicked -->
+          <div id="sp-details" style="max-height:0;overflow:hidden;opacity:0;transition:max-height .5s cubic-bezier(.77,0,.18,1),opacity .3s ease;">
+            <div style="padding-bottom:1.4rem;margin-bottom:1.4rem;border-bottom:1px solid rgba(0,0,0,.07);">
+              <p id="product-name" style="font-family:'Montserrat',sans-serif;font-weight:900;font-size:1.1rem;letter-spacing:-.02em;text-transform:uppercase;color:#1a1714;line-height:1.1;margin-bottom:.85rem;">Áo Khoác Denim Laser Washed</p>
+              <ul style="list-style:none;margin-bottom:.9rem;">
+                <li style="font-family:'Montserrat',sans-serif;font-size:.68rem;color:rgba(26,23,20,.55);letter-spacing:.04em;text-transform:uppercase;padding:.2rem 0;border-bottom:1px solid rgba(0,0,0,.06);display:flex;align-items:center;gap:.5rem;"><span style="color:rgba(140,100,40,.6);">—</span> Raw Denim Construction</li>
+                <li style="font-family:'Montserrat',sans-serif;font-size:.68rem;color:rgba(26,23,20,.55);letter-spacing:.04em;text-transform:uppercase;padding:.2rem 0;border-bottom:1px solid rgba(0,0,0,.06);display:flex;align-items:center;gap:.5rem;"><span style="color:rgba(140,100,40,.6);">—</span> Boxy Streetwear Fit</li>
+                <li style="font-family:'Montserrat',sans-serif;font-size:.68rem;color:rgba(26,23,20,.55);letter-spacing:.04em;text-transform:uppercase;padding:.2rem 0;border-bottom:1px solid rgba(0,0,0,.06);display:flex;align-items:center;gap:.5rem;"><span style="color:rgba(140,100,40,.6);">—</span> Minimal Wash — Shape Retention</li>
+                <li style="font-family:'Montserrat',sans-serif;font-size:.68rem;color:rgba(26,23,20,.55);letter-spacing:.04em;text-transform:uppercase;padding:.2rem 0;display:flex;align-items:center;gap:.5rem;"><span style="color:rgba(140,100,40,.6);">—</span> True To Size</li>
+              </ul>
+              <p id="cw-desc" style="font-family:'Montserrat',sans-serif;font-size:.75rem;color:rgba(26,23,20,.4);line-height:1.8;letter-spacing:.02em;transition:opacity .25s;">Washed-out sage tones with a lived-in feel. Classic boxy cut with dual chest pockets and tonal stitching. Breaks in beautifully over time. Every wear makes it yours.</p>
+            </div>
+          </div>
+
+          <!-- Colorway label row -->
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.85rem;">
+            <p style="font-family:'Montserrat',sans-serif;font-weight:700;font-size:.55rem;letter-spacing:.25em;text-transform:uppercase;color:rgba(26,23,20,.35);">Select Colorway</p>
+            <p id="cw-label" style="font-family:'Montserrat',sans-serif;font-weight:700;font-size:.55rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(140,100,40,.75);">—</p>
+          </div>
+
+          <!-- 2-col grid, bigger images -->
+          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:.75rem;">
+            <div class="cw-card" onclick="selectColorway(this,'Black','Deep black raw denim with a structured, minimal silhouette. Heavy fabric weight with a sharp shoulder. Gets richer and more defined with every wash.')">
+              <img src="jacket-black-new.png" alt="Black" />
+            </div>
+            <div class="cw-card" onclick="selectColorway(this,'Raw Indigo','Raw selvedge indigo with signature S-hook metal closures. Limited-edition hardware detailing. Stiff out of the box, fades uniquely to your body over time.')">
+              <img src="indigo-front.png" alt="Raw Indigo" />
+            </div>
+
+            <div class="cw-card" onclick="selectColorway(this,'Raw Denim V1','Deep navy with a subtle sheen. Clean Western-style pockets and a relaxed boxy cut. The most versatile colorway, pairs with everything in your rotation.')">
+              <img src="navy-grid.png" alt="Raw Denim V1" />
+            </div>
+            <div class="cw-card" onclick="selectColorway(this,'Laser Washed','Sun-bleached laser wash with a soft, worn-in feel. Classic trucker silhouette with dual chest pockets. The easiest jacket to reach for every day.')">
+              <img src="JUVA-1-cutout-scaled.webp" alt="Laser Washed" />
+            </div>
+            <div class="cw-card" onclick="selectColorway(this,'Raw Denim V2','Classic raw denim construction with contrast white stitching. Boxy trucker silhouette built for everyday wear. Stiff out of the box, breaks in to your body over time.')">
+              <img src="rawv2-grid.png" alt="Raw Denim V2" />
+            </div>
+            <div class="cw-card" onclick="selectColorway(this,'Form Boxy','Boxy denim construction with contrast white stitching. Relaxed fit with dual chest pockets.')">
+              <img src="formboxy-grid.png" alt="Form Boxy" />
+            </div>
+          </div>
+
+        </div>
+        </div><!-- /min-width wrapper -->
+      </div><!-- /sp-info -->
 
       <!-- CENTER: scrollable image -->
-      <div id="img-stage" style="position:relative;overflow:hidden;background:#e8e4dd;border-right:1px solid rgba(0,0,0,.08);">
-        <div id="img-slider" style="position:absolute;top:0;left:0;width:100%;display:flex;flex-direction:column;transition:transform .55s cubic-bezier(.77,0,.18,1);will-change:transform;">
-          <div class="img-slide" style="background:#f5f2ed;display:flex;align-items:center;justify-content:center;"><img src="model-standing.png" alt="HDB Raw Denim Jacket V2 - Standing" style="width:auto;height:90vh;object-fit:contain;display:block;"/></div>
-          <div class="img-slide" style="background:#f5f2ed;display:flex;align-items:center;justify-content:center;"><img src="model-crouching.png" alt="HDB Raw Denim Jacket V2 - Crouching" style="width:auto;height:90vh;object-fit:contain;display:block;"/></div>
-          <div class="img-slide"><img src="https://hardyboys.vn/wp-content/uploads/2026/01/vn-11134207-7ras8-m3m5735q4xlt2d.jpeg" alt="HDB Raw Denim Jacket V2 - 3" style="width:100%;height:100vh;object-fit:cover;display:block;"/></div>
-          <div class="img-slide"><img src="https://hardyboys.vn/wp-content/uploads/2026/01/vn-11134207-7ras8-m3m5735q6c692f.jpeg" alt="HDB Raw Denim Jacket V2 - 4" style="width:100%;height:100vh;object-fit:cover;display:block;"/></div>
-          <div class="img-slide"><img src="https://hardyboys.vn/wp-content/uploads/2026/01/vn-11134207-7ras8-m3m5734c5k4h65.jpeg" alt="HDB Raw Denim Jacket V2 - 5" style="width:100%;height:100vh;object-fit:cover;display:block;"/></div>
-          <div class="img-slide"><img src="https://hardyboys.vn/wp-content/uploads/2026/01/vn-11134207-7ras8-m3m573425z988c.jpeg" alt="HDB Raw Denim Jacket V2 - 6" style="width:100%;height:100vh;object-fit:cover;display:block;"/></div>
-          <div class="img-slide"><img src="https://hardyboys.vn/wp-content/uploads/2026/01/vn-11134207-7ras8-m3m5733i6rz5fc.jpeg" alt="HDB Raw Denim Jacket V2 - 7" style="width:100%;height:100vh;object-fit:cover;display:block;"/></div>
-          <div class="img-slide"><img src="https://hardyboys.vn/wp-content/uploads/2026/01/vn-11134207-7ras8-m3m5733s6dcx2d.jpeg" alt="HDB Raw Denim Jacket V2 - 8" style="width:100%;height:100vh;object-fit:cover;display:block;"/></div>
-          <div class="img-slide"><img src="https://hardyboys.vn/wp-content/uploads/2026/01/vn-11134207-7ras8-m3m5735g3y64a2.jpeg" alt="HDB Raw Denim Jacket V2 - 9" style="width:100%;height:100vh;object-fit:cover;display:block;"/></div>
-          <div class="img-slide"><img src="https://hardyboys.vn/wp-content/uploads/2026/01/vn-11134207-7ras8-m4jdpn3zzphr21.jpeg" alt="HDB Raw Denim Jacket V2 - 10" style="width:100%;height:100vh;object-fit:cover;display:block;"/></div>
-          <div class="img-slide"><img src="https://hardyboys.vn/wp-content/uploads/2026/01/vn-11134207-7ras8-m3pe5vpqlqr95f.jpeg" alt="HDB Raw Denim Jacket V2 - 11" style="width:100%;height:100vh;object-fit:cover;display:block;"/></div>
-        </div>
+      <div id="img-stage" style="position:relative;overflow:hidden;background:#e8e4dd;border-right:1px solid rgba(0,0,0,.08);flex:1;min-width:0;">
+        <div id="img-slider" style="position:absolute;top:0;left:0;width:100%;display:flex;flex-direction:column;transition:transform .55s cubic-bezier(.77,0,.18,1);will-change:transform;"></div>
 
-        <!-- dot indicators -->
-        <div id="img-dots" style="position:absolute;right:.75rem;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:.4rem;z-index:5;">
-          <div class="img-dot active" onclick="goImg(0)"></div>
-          <div class="img-dot" onclick="goImg(1)"></div>
-          <div class="img-dot" onclick="goImg(2)"></div>
-          <div class="img-dot" onclick="goImg(3)"></div>
-          <div class="img-dot" onclick="goImg(4)"></div>
-          <div class="img-dot" onclick="goImg(5)"></div>
-          <div class="img-dot" onclick="goImg(6)"></div>
-          <div class="img-dot" onclick="goImg(7)"></div>
-          <div class="img-dot" onclick="goImg(8)"></div>
-          <div class="img-dot" onclick="goImg(9)"></div>
-          <div class="img-dot" onclick="goImg(10)"></div>
-        </div>
+        <!-- dot indicators (populated by buildSlider) -->
+        <div id="img-dots" style="position:absolute;right:.75rem;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:.4rem;z-index:5;"></div>
       </div>
 
-      <!-- RIGHT: purchase -->
-      <div style="padding:2.5rem 2rem;display:flex;flex-direction:column;justify-content:center;background:#f5f2ed;">
+      <!-- RIGHT: purchase (hidden until product selected) -->
+      <div id="sp-purchase" style="width:0;min-width:0;flex-shrink:0;overflow:hidden;opacity:0;background:#f5f2ed;border-left:1px solid rgba(0,0,0,.08);transition:width .6s cubic-bezier(.77,0,.18,1),min-width .6s cubic-bezier(.77,0,.18,1),opacity .4s ease .15s;">
+      <div style="min-width:340px;padding:2rem 2rem;display:flex;flex-direction:column;justify-content:center;height:100%;overflow-y:auto;">
 
         <div>
           <p style="font-family:'Montserrat',sans-serif;font-weight:500;font-size:.6rem;letter-spacing:.25em;text-transform:uppercase;color:rgba(140,100,40,.6);margin-bottom:.4rem;">Hardy Boys — Drop 006</p>
-          <p style="font-family:'Montserrat',sans-serif;font-weight:900;font-size:2rem;color:#1a1714;letter-spacing:-.02em;">350,000<span style="font-size:.9rem;font-weight:500;color:rgba(26,23,20,.35);margin-left:.3rem;">VND</span></p>
+          <p style="font-family:'Montserrat',sans-serif;font-weight:900;font-size:2rem;color:#1a1714;letter-spacing:-.02em;"><span id="product-price">430,000</span><span style="font-size:.9rem;font-weight:500;color:rgba(26,23,20,.35);margin-left:.3rem;">VND</span></p>
 
           <div style="margin-top:1.8rem;margin-bottom:.6rem;">
             <p style="font-family:'Montserrat',sans-serif;font-weight:600;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(26,23,20,.4);margin-bottom:.75rem;">Size</p>
@@ -569,7 +651,8 @@
           </div>
         </div>
 
-      </div>
+      </div><!-- /min-width wrapper -->
+      </div><!-- /sp-purchase -->
     </div>
   </div>
 
@@ -639,6 +722,9 @@
       overflow: hidden;
       flex-shrink: 0;
     }
+    .img-slide img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
 
     /* ── dot indicators ── */
     .img-dot {
@@ -653,6 +739,53 @@
       transform: scale(1.4);
     }
     .img-dot:hover { background: rgba(140,100,40,.5); }
+
+    /* ── store menu items ── */
+    .sp-menu-item {
+      display: block; width: 100%;
+      background: none; border: none; cursor: pointer;
+      font-family: 'Montserrat', sans-serif;
+      font-size: .82rem; font-weight: 400;
+      color: rgba(26,23,20,.45);
+      padding: .38rem 0;
+      text-align: left;
+      letter-spacing: .01em;
+      transition: color .18s, padding-left .18s;
+      position: relative;
+    }
+    .sp-menu-item:hover { color: #1a1714; padding-left: .8rem; }
+    .sp-menu-item::before {
+      content: '—';
+      position: absolute; left: -1rem;
+      color: rgba(140,100,40,.7); opacity: 0;
+      transition: opacity .18s;
+      font-size: .7rem;
+    }
+    .sp-menu-item:hover::before { opacity: 1; }
+    .sp-menu-item.sp-menu-active { color: #1a1714; font-weight: 700; }
+
+    /* ── colorway grid ── */
+    .cw-card {
+      position: relative;
+      aspect-ratio: 1 / 1;
+      background: #f0ede8;
+      border: 1.5px solid rgba(0,0,0,.1);
+      cursor: pointer;
+      overflow: hidden;
+      transition: border-color .2s, transform .2s, box-shadow .2s;
+    }
+    .cw-card img {
+      width: 100%; height: 100%;
+      object-fit: contain;
+      padding: .35rem;
+      transition: transform .3s ease;
+    }
+    .cw-card:hover { border-color: rgba(140,100,40,.5); transform: translateY(-2px); }
+    .cw-card:hover img { transform: scale(1.07); }
+    .cw-card.active {
+      border-color: rgba(140,100,40,.85);
+      box-shadow: 0 0 0 1px rgba(140,100,40,.3);
+    }
 
     /* ── size buttons ── */
     .size-btn {
@@ -733,6 +866,20 @@
           shopPage.classList.add('entering');
           mainUI.style.display = 'none';
           bgVideo.style.display = 'none';
+          // reset fully to menu state
+          const menu     = document.getElementById('sp-menu');
+          const purchase = document.getElementById('sp-purchase');
+          const details  = document.getElementById('sp-details');
+          const infoBack = document.getElementById('sp-info-back');
+          menu.style.width = '320px'; menu.style.minWidth = '320px'; menu.style.opacity = '1';
+          purchase.style.width = '0'; purchase.style.minWidth = '0'; purchase.style.opacity = '0';
+          details.style.maxHeight = '0'; details.style.opacity = '0';
+          infoBack.style.display = 'none';
+          document.querySelectorAll('.cw-card').forEach(c => c.classList.remove('active'));
+          document.getElementById('cw-label').textContent = '—';
+          buildSlider(defaultImages);
+          detailsOpen = false;
+          shopState = 'menu';
         }
 
         // step 3: bars slide OUT (open)
@@ -773,29 +920,134 @@
       el.addEventListener('click', () => window.open(el.dataset.href, '_blank'));
     });
 
-    document.getElementById('shop-back').addEventListener('click', transitionBack);
-
     // ── image slider ──
     let imgIndex = 0;
-    const totalImgs = 11;
-    const slider  = document.getElementById('img-slider');
-    const counter = document.getElementById('img-counter');
-    const dots    = document.querySelectorAll('.img-dot');
+    const slider = document.getElementById('img-slider');
+
+    const colorwayData = {
+      'Black':        { price: '350,000', name: 'HDB Raw Denim Jacket V2',              images: ['black-cutout.png', 'black-front.png', 'black-back.png', 'indigo-model2.webp', 'indigo-model1.webp', 'archive-02-45-scaled.webp'] },
+      'Raw Indigo':   { price: '410,000', name: 'Áo Khoác Raw Denim – Clasp Series',    images: ['indigo-model-cutout.png', 'indigo-front.png', 'indigo-back.png', 'indigo-store1.webp', 'indigo-lifestyle.webp', 'indigo-store2.webp', 'archive-02-41-scaled.webp', 'archive-02-42-scaled.webp', 'archive-02-43-scaled.webp', 'archive-02-44-scaled.webp'] },
+
+      'Raw Denim V1': { price: '350,000', name: 'Áo Khoác Raw Denim V1',              images: ['rawv2-model2.png', {src:'navy-front.png',fit:'contain'}, {src:'navy-back.png',fit:'contain'}, 'rawv2-vn-11134207-7ras8-m3m5735q4xlt2d.jpeg', 'rawv2-vn-11134207-7ras8-m3m5735q6c692f.jpeg', 'rawv2-vn-11134207-7ras8-m3m5734c5k4h65.jpeg', 'rawv2-vn-11134207-7ras8-m3m573425z988c.jpeg', 'rawv2-vn-11134207-7ras8-m3m5733i6rz5fc.jpeg', 'rawv2-vn-11134207-7ras8-m3m5733s6dcx2d.jpeg', 'rawv2-vn-11134207-7ras8-m3m5735g3y64a2.jpeg', 'rawv2-vn-11134207-7ras8-m4jdpn3zzphr21.jpeg', 'rawv2-vn-11134207-7ras8-m3pe5vpqlqr95f.jpeg'] },
+      'Raw Denim V2': { price: '350,000', name: 'Áo Khoác Raw Denim V2',             images: ['rawv2-model1.png', 'rawv2-model2.png', 'rawv2-vn-11134207-7ras8-m3m5735q4xlt2d.jpeg', 'rawv2-vn-11134207-7ras8-m3m5735q6c692f.jpeg', 'rawv2-vn-11134207-7ras8-m3m5734c5k4h65.jpeg', 'rawv2-vn-11134207-7ras8-m3m573425z988c.jpeg', 'rawv2-vn-11134207-7ras8-m3m5733i6rz5fc.jpeg', 'rawv2-vn-11134207-7ras8-m3m5733s6dcx2d.jpeg', 'rawv2-vn-11134207-7ras8-m3m5735g3y64a2.jpeg', 'rawv2-vn-11134207-7ras8-m4jdpn3zzphr21.jpeg', 'rawv2-vn-11134207-7ras8-m3pe5vpqlqr95f.jpeg'] },
+      'Laser Washed': { price: '430,000', name: 'Áo Khoác Denim Laser Washed',          images: ['lightwash-model.png', 'laser-washed-back.png', 'laser-washed-detail.png', 'JUVA-1-cutout-scaled.webp', 'archive-02-07-scaled.webp', 'archive-02-08-scaled.webp', 'archive-02-09-scaled.webp'] },
+      'Form Boxy':    { price: '350,000', name: 'Áo Khoác Denim Form Boxy',             images: ['formboxy-cutout.png', 'formboxy-back.png', 'formboxy-1.webp', 'formboxy-2.webp', 'formboxy-3.webp', 'formboxy-4.webp', 'formboxy-5.webp', 'formboxy-6.webp'] },
+    };
+    const defaultImages = colorwayData['Laser Washed'].images;
+    // keep a ref so buildSlider(defaultImages) always uses latest array
+
+    function buildSlider(images) {
+      imgIndex = 0;
+      slider.innerHTML = images.map(item => {
+        const src = typeof item === 'string' ? item : item.src;
+        const fit = typeof item === 'object' && item.fit ? item.fit : 'cover';
+        return `<div class="img-slide"><img src="${src}" alt="" style="object-fit:${fit}" /></div>`;
+      }).join('');
+      const dotsEl = document.getElementById('img-dots');
+      dotsEl.innerHTML = images.map((_, i) =>
+        `<div class="img-dot${i === 0 ? ' active' : ''}" onclick="goImg(${i})"></div>`
+      ).join('');
+      slider.style.transform = 'translateY(0)';
+    }
 
     function goImg(i) {
-      imgIndex = Math.max(0, Math.min(i, totalImgs - 1));
+      const allDots = document.querySelectorAll('.img-dot');
+      imgIndex = Math.max(0, Math.min(i, allDots.length - 1));
       slider.style.transform = 'translateY(' + (-imgIndex * 100) + 'vh)';
-      counter.textContent = String(imgIndex + 1).padStart(2, '0') + ' / ' + String(totalImgs).padStart(2, '0');
-      dots.forEach((d, idx) => d.classList.toggle('active', idx === imgIndex));
+      allDots.forEach((d, idx) => d.classList.toggle('active', idx === imgIndex));
     }
 
     function nextImg() { goImg(imgIndex + 1); }
     function prevImg() { goImg(imgIndex - 1); }
 
+    buildSlider(defaultImages);
+
     function selectSize(btn) {
       document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('selected'));
       btn.classList.add('selected');
     }
+
+    // ── panel sliding ──
+    let shopState = 'menu'; // 'menu' | 'product'
+    let detailsOpen = false;
+
+    function openProductPanel() {
+      const menu     = document.getElementById('sp-menu');
+      const purchase = document.getElementById('sp-purchase');
+      const infoBack = document.getElementById('sp-info-back');
+      menu.style.width = '0'; menu.style.minWidth = '0'; menu.style.opacity = '0';
+      purchase.style.width = '360px'; purchase.style.minWidth = '360px'; purchase.style.opacity = '1';
+      infoBack.style.display = 'block';
+      shopState = 'product';
+    }
+
+    function closeProductPanel() {
+      const menu     = document.getElementById('sp-menu');
+      const purchase = document.getElementById('sp-purchase');
+      const details  = document.getElementById('sp-details');
+      const infoBack = document.getElementById('sp-info-back');
+      // revert columns
+      menu.style.width = '320px'; menu.style.minWidth = '320px'; menu.style.opacity = '1';
+      purchase.style.width = '0'; purchase.style.minWidth = '0'; purchase.style.opacity = '0';
+      infoBack.style.display = 'none';
+      // collapse details
+      details.style.maxHeight = '0'; details.style.opacity = '0';
+      // clear selections
+      document.querySelectorAll('.cw-card').forEach(c => c.classList.remove('active'));
+      document.getElementById('cw-label').textContent = '—';
+      buildSlider(defaultImages);
+      document.getElementById('product-name').textContent = colorwayData['Laser Washed'].name;
+      document.getElementById('product-price').textContent = colorwayData['Laser Washed'].price;
+      detailsOpen = false;
+      shopState = 'menu';
+    }
+
+    function selectColorway(card, name, desc) {
+      const details = document.getElementById('sp-details');
+
+      // clicking same active card → close everything and revert
+      if (card.classList.contains('active') && detailsOpen) {
+        closeProductPanel();
+        return;
+      }
+
+      // activate card
+      document.querySelectorAll('.cw-card').forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+      document.getElementById('cw-label').textContent = name;
+
+      // update description
+      const d = document.getElementById('cw-desc');
+      d.style.opacity = '0';
+      setTimeout(() => { d.textContent = desc; d.style.opacity = '1'; }, 180);
+
+      // load colorway images + update name/price
+      const cwd = colorwayData[name];
+      if (cwd) {
+        buildSlider(cwd.images);
+        document.getElementById('product-name').textContent = cwd.name;
+        document.getElementById('product-price').textContent = cwd.price;
+      } else {
+        buildSlider(defaultImages);
+      }
+
+      // expand details
+      details.style.maxHeight = '500px';
+      details.style.opacity = '1';
+      detailsOpen = true;
+
+      // trigger column slide if not already done
+      if (shopState !== 'product') openProductPanel();
+    }
+
+    // left-panel back button (menu state → landing)
+    document.getElementById('shop-back').addEventListener('click', function() {
+      if (shopState === 'product') {
+        closeProductPanel();
+      } else {
+        transitionBack();
+      }
+    });
 
     // scroll wheel on the image stage — throttled to one slide per scroll
     let scrollLocked = false;

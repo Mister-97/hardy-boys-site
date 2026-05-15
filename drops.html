@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hardy Boys — Drop 006</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold: #B8924A;
+      --black: #0a0a0a;
+      --mid: #777;
+      --border: #e8e8e8;
+    }
+
+    html, body {
+      width: 100%; height: 100vh;
+      overflow: hidden;
+      background: #fff;
+      color: var(--black);
+      font-family: 'Montserrat', sans-serif;
+      cursor: crosshair;
+    }
+
+    /* ── CURSOR ── */
+    #cdot {
+      position: fixed; width: 5px; height: 5px;
+      background: var(--black); border-radius: 50%;
+      pointer-events: none; z-index: 99999;
+      transform: translate(-50%,-50%);
+      transition: width .15s, height .15s, background .15s;
+    }
+    #cring {
+      position: fixed; width: 30px; height: 30px;
+      border: 1px solid rgba(10,10,10,.18); border-radius: 50%;
+      pointer-events: none; z-index: 99998;
+      transform: translate(-50%,-50%);
+      transition: left .08s ease, top .08s ease, width .2s, height .2s, border-color .2s;
+    }
+
+    /* ── HEADER ── */
+    header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: 56px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem;
+      border-bottom: 1px solid var(--border);
+      background: #fff;
+    }
+
+    .back-btn {
+      display: flex; align-items: center; gap: .45rem;
+      background: none; border: none; cursor: pointer;
+      font-size: .58rem; font-weight: 700; letter-spacing: .18em;
+      text-transform: uppercase; color: var(--mid);
+      font-family: 'Montserrat', sans-serif;
+      transition: color .2s;
+    }
+    .back-btn:hover { color: var(--black); }
+
+    .header-center {
+      font-size: .62rem; font-weight: 900; letter-spacing: .4em;
+      text-transform: uppercase; color: var(--black);
+    }
+
+    .header-right {
+      font-size: .55rem; font-weight: 400; letter-spacing: .18em;
+      text-transform: uppercase; color: var(--mid);
+      font-style: italic;
+    }
+
+    /* ── LAYOUT: two columns, fixed height ── */
+    .layout {
+      position: fixed;
+      top: 56px; left: 0; right: 0; bottom: 0;
+      display: grid;
+      grid-template-columns: 380px 1fr;
+    }
+
+    /* ══════════════ LEFT PANEL ══════════════ */
+    .left-panel {
+      border-right: 1px solid var(--border);
+      display: flex; flex-direction: column;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    /* top: drop info */
+    .left-top {
+      padding: 1.8rem 2rem 1.4rem;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .drop-eyebrow {
+      font-size: .48rem; font-weight: 700; letter-spacing: .4em;
+      text-transform: uppercase; color: var(--gold);
+      margin-bottom: .35rem;
+    }
+    .drop-title {
+      font-size: 1.6rem; font-weight: 900; letter-spacing: -.03em;
+      text-transform: uppercase; line-height: 1; color: var(--black);
+    }
+    .drop-sub {
+      font-size: .55rem; font-weight: 400; font-style: italic;
+      color: var(--mid); letter-spacing: .05em; margin-top: .4rem;
+    }
+
+    /* middle: jacket carousel */
+    .jacket-carousel {
+      flex: 1;
+      display: flex; flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* nav arrows */
+    .carousel-nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: .9rem 2rem;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .nav-label {
+      font-size: .5rem; font-weight: 700; letter-spacing: .3em;
+      text-transform: uppercase; color: var(--mid);
+    }
+    .nav-arrows { display: flex; gap: .5rem; }
+    .nav-btn {
+      width: 32px; height: 32px;
+      border: 1px solid var(--border);
+      background: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--mid);
+      transition: border-color .2s, background .2s, color .2s;
+    }
+    .nav-btn:hover:not(:disabled) {
+      border-color: var(--black); background: var(--black); color: #fff;
+    }
+    .nav-btn:disabled { opacity: .25; cursor: default; }
+
+    /* the sliding track */
+    .carousel-track-wrap {
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+    }
+    .carousel-track {
+      display: flex; flex-direction: column;
+      transition: transform .45s cubic-bezier(.77,0,.18,1);
+      will-change: transform;
+    }
+
+    /* ── GRID of jacket cards ── */
+    .carousel-track {
+      display: grid !important;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border); /* gap color via background trick */
+      transition: none !important;
+      transform: none !important;
+    }
+
+    .jacket-card {
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      transition: background .2s;
+      position: relative;
+      overflow: hidden;
+      background: #fff;
+    }
+    .jacket-card:hover { background: #fafafa; }
+    .jacket-card.active { background: #fff; }
+    .jacket-card.active::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 2px; background: var(--gold);
+    }
+    .jacket-card.soldout { cursor: default; }
+    .jacket-card.soldout:hover { background: #fff; }
+
+    .card-img-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      background: #f7f7f7;
+    }
+    .card-img-wrap img {
+      width: 100%; height: 100%; object-fit: contain;
+      padding: .75rem;
+      transition: transform .4s ease;
+    }
+    .jacket-card:not(.soldout):hover .card-img-wrap img { transform: scale(1.06); }
+    .jacket-card.active .card-img-wrap img { transform: scale(1.04); }
+
+    .soldout-badge {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(255,255,255,.65);
+      font-size: .45rem; font-weight: 900; letter-spacing: .3em;
+      text-transform: uppercase; color: var(--black);
+    }
+
+    .card-info {
+      padding: .7rem .85rem .85rem;
+      border-top: 1px solid var(--border);
+      display: flex; flex-direction: column;
+    }
+    .card-number {
+      font-size: .42rem; font-weight: 700; letter-spacing: .3em;
+      color: var(--border); margin-bottom: .25rem;
+      transition: color .2s;
+    }
+    .jacket-card.active .card-number { color: var(--gold); }
+    .card-name {
+      font-size: .7rem; font-weight: 900; text-transform: uppercase;
+      letter-spacing: .01em; color: var(--black); line-height: 1.1;
+    }
+    .card-colorway {
+      font-size: .5rem; font-weight: 500; letter-spacing: .12em;
+      text-transform: uppercase; color: var(--mid); margin-top: .15rem;
+    }
+    .card-price {
+      font-size: .72rem; font-weight: 900; color: var(--black);
+      margin-top: .45rem; letter-spacing: -.01em;
+    }
+    .card-soldout-text {
+      font-size: .48rem; font-weight: 700; letter-spacing: .2em;
+      text-transform: uppercase; color: #c0392b; margin-top: .15rem;
+    }
+
+    /* bottom: selected info + buy */
+    .left-bottom {
+      border-top: 1px solid var(--border);
+      padding: 1.4rem 2rem 1.6rem;
+      flex-shrink: 0;
+    }
+
+    .selected-name {
+      font-size: .95rem; font-weight: 900; text-transform: uppercase;
+      letter-spacing: .02em; color: var(--black);
+      margin-bottom: .2rem;
+    }
+    .selected-color {
+      font-size: .55rem; font-weight: 600; letter-spacing: .2em;
+      text-transform: uppercase; color: var(--gold);
+      margin-bottom: 1.2rem; display: block;
+    }
+
+    .size-row {
+      display: flex; gap: .4rem; margin-bottom: 1.2rem;
+    }
+    .size-btn {
+      padding: .38rem .75rem;
+      border: 1px solid var(--border);
+      background: none; cursor: pointer;
+      font-family: 'Montserrat', sans-serif;
+      font-size: .55rem; font-weight: 700; letter-spacing: .1em;
+      text-transform: uppercase; color: var(--mid);
+      transition: border-color .2s, background .2s, color .2s;
+    }
+    .size-btn:hover { border-color: var(--black); color: var(--black); }
+    .size-btn.selected { background: var(--black); border-color: var(--black); color: #fff; }
+
+    .buy-btn {
+      display: flex; align-items: center; justify-content: center; gap: .6rem;
+      width: 100%; padding: .9rem;
+      background: var(--black); color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      font-size: .62rem; font-weight: 900; letter-spacing: .22em;
+      text-transform: uppercase; text-decoration: none;
+      border: none; cursor: pointer;
+      transition: background .2s, letter-spacing .2s;
+    }
+    .buy-btn:hover { background: var(--gold); letter-spacing: .28em; }
+    .buy-btn.disabled {
+      background: var(--border); color: var(--mid); cursor: default;
+      pointer-events: none;
+    }
+
+    /* ══════════════ RIGHT PANEL: model ══════════════ */
+    .right-panel {
+      position: relative;
+      display: flex; align-items: flex-end; justify-content: center;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    /* big faded drop number behind model */
+    .bg-number {
+      position: absolute;
+      bottom: -2rem; right: -1rem;
+      font-size: clamp(12rem, 22vw, 22rem);
+      font-weight: 900; letter-spacing: -.06em;
+      color: rgba(0,0,0,.035);
+      user-select: none; pointer-events: none;
+      line-height: 1;
+    }
+
+    /* subtle grid lines */
+    .bg-grid {
+      position: absolute; inset: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(0,0,0,.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,0,0,.025) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+
+    /* colorway indicator top-right */
+    .colorway-badge {
+      position: absolute; top: 1.8rem; right: 2rem;
+      display: flex; flex-direction: column; align-items: flex-end;
+      gap: .2rem;
+    }
+    .colorway-badge-label {
+      font-size: .45rem; font-weight: 700; letter-spacing: .35em;
+      text-transform: uppercase; color: var(--mid);
+    }
+    .colorway-badge-value {
+      font-size: 1rem; font-weight: 900; letter-spacing: -.02em;
+      text-transform: uppercase; color: var(--black);
+      transition: opacity .3s;
+    }
+    .colorway-swatch {
+      width: 28px; height: 3px;
+      background: var(--black);
+      margin-top: .1rem;
+      transition: background .4s;
+    }
+
+    /* index dots */
+    .index-dots {
+      position: absolute; top: 50%; right: 1.5rem;
+      transform: translateY(-50%);
+      display: flex; flex-direction: column; gap: .5rem;
+    }
+    .index-dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--border);
+      cursor: pointer;
+      transition: background .2s, transform .2s;
+    }
+    .index-dot.active { background: var(--black); transform: scale(1.6); }
+
+    /* model video */
+    #model-video {
+      position: relative; z-index: 2;
+      height: clamp(400px, 78vh, 720px);
+      width: auto; object-fit: contain;
+      transform-origin: center bottom;
+      transform-style: preserve-3d;
+      filter: drop-shadow(0 50px 80px rgba(0,0,0,.08));
+      transition: filter .3s;
+    }
+
+    /* platform */
+    .model-base {
+      position: absolute; bottom: 0; left: 0; right: 0; z-index: 1;
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .base-line {
+      width: 50%; height: 1px;
+      background: linear-gradient(to right, transparent, var(--border), transparent);
+    }
+    .base-glow {
+      width: 200px; height: 10px;
+      background: radial-gradient(ellipse at center, rgba(184,146,74,.15) 0%, transparent 70%);
+    }
+
+    /* spin animation */
+    @keyframes spinModel {
+      0%   { transform: rotateY(0deg)   scaleX(1); }
+      25%  { transform: rotateY(90deg)  scaleX(.04); }
+      50%  { transform: rotateY(180deg) scaleX(1); }
+      75%  { transform: rotateY(270deg) scaleX(.04); }
+      100% { transform: rotateY(360deg) scaleX(1); }
+    }
+    #model-video.spinning {
+      animation: spinModel .8s cubic-bezier(.4,0,.2,1) forwards;
+    }
+
+    @keyframes glowBurst {
+      0%   { width: 200px; opacity: 1; }
+      40%  { width: 360px; opacity: .4; }
+      100% { width: 200px; opacity: 1; }
+    }
+    .right-panel.active .base-glow {
+      animation: glowBurst .8s ease forwards;
+    }
+
+    /* keyboard hint */
+    .key-hint {
+      position: absolute; bottom: 1.5rem; left: 50%;
+      transform: translateX(-50%);
+      font-size: .44rem; letter-spacing: .3em; text-transform: uppercase;
+      color: rgba(0,0,0,.2); white-space: nowrap;
+      pointer-events: none;
+      animation: blink 3s ease-in-out infinite;
+    }
+    @keyframes blink { 0%,100% { opacity:1; } 50% { opacity:.3; } }
+
+    /* page entrance */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .left-panel  { animation: fadeUp .5s ease .05s both; }
+    .right-panel { animation: fadeUp .5s ease .0s both; }
+  </style>
+</head>
+<body>
+
+  <div id="cdot"></div>
+  <div id="cring"></div>
+
+  <!-- HEADER -->
+  <header>
+    <button class="back-btn" onclick="window.location.href='index.html'">
+      <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+        <path d="M19 12H5M12 19l-7-7 7-7"/>
+      </svg>
+      Back
+    </button>
+    <span class="header-center">Hardy Boys</span>
+    <span class="header-right">Drop 006 — Raw Denim Series</span>
+  </header>
+
+  <!-- LAYOUT -->
+  <div class="layout">
+
+    <!-- ═══ LEFT PANEL ═══ -->
+    <div class="left-panel">
+
+      <!-- drop info -->
+      <div class="left-top">
+        <div class="drop-eyebrow">Drop 006 · 2026</div>
+        <div class="drop-title">Raw<br/>Denim<br/>Jacket V2</div>
+        <div class="drop-sub">Saigon Street Culture — Boxy Streetwear Fit</div>
+      </div>
+
+      <!-- carousel -->
+      <div class="jacket-carousel">
+
+        <div class="carousel-nav">
+          <span class="nav-label">Select Colorway</span>
+          <div class="nav-arrows">
+            <button class="nav-btn" id="btn-prev" onclick="navigate(-1)" disabled>
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 15l-6-6-6 6"/></svg>
+            </button>
+            <button class="nav-btn" id="btn-next" onclick="navigate(1)">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="carousel-track-wrap" id="track-wrap">
+          <div class="carousel-track" id="track">
+
+            <!-- 01 Light Wash -->
+            <div class="jacket-card active"
+                 data-index="0"
+                 data-name="HDB Raw Denim V2"
+                 data-color="Light Wash"
+                 data-swatch="#c8d4b8"
+                 data-price="350,000 VND"
+                 data-soldout="false"
+                 data-link="https://hardyboys.vn/ao-khoac-jeans-nam-boxy-hdb-raw-denim-jacket-v1/"
+                 onclick="selectCard(0)">
+              <div class="card-img-wrap">
+                <img src="jacket-lightwash.webp" alt="Light Wash" />
+              </div>
+              <div class="card-info">
+                <div class="card-number">01</div>
+                <div class="card-name">Raw Denim V2</div>
+                <div class="card-colorway">Light Wash</div>
+                <div class="card-price">350,000 VND</div>
+              </div>
+            </div>
+
+            <!-- 02 Black -->
+            <div class="jacket-card"
+                 data-index="1"
+                 data-name="HDB Raw Denim V2"
+                 data-color="Black"
+                 data-swatch="#1a1a1a"
+                 data-price="350,000 VND"
+                 data-soldout="false"
+                 data-link="https://hardyboys.vn/ao-khoac-jeans-nam-boxy-hdb-raw-denim-jacket-v1/"
+                 onclick="selectCard(1)">
+              <div class="card-img-wrap">
+                <img src="jacket-black.webp" alt="Black" />
+              </div>
+              <div class="card-info">
+                <div class="card-number">02</div>
+                <div class="card-name">Raw Denim V2</div>
+                <div class="card-colorway">Black</div>
+                <div class="card-price">350,000 VND</div>
+              </div>
+            </div>
+
+            <!-- 03 Raw Indigo -->
+            <div class="jacket-card"
+                 data-index="2"
+                 data-name="HDB Raw Denim V2"
+                 data-color="Raw Indigo"
+                 data-swatch="#4a5568"
+                 data-price="350,000 VND"
+                 data-soldout="false"
+                 data-link="https://hardyboys.vn/ao-khoac-jeans-nam-boxy-hdb-raw-denim-jacket-v1/"
+                 onclick="selectCard(2)">
+              <div class="card-img-wrap">
+                <img src="jacket-raw-indigo.webp" alt="Raw Indigo" />
+              </div>
+              <div class="card-info">
+                <div class="card-number">03</div>
+                <div class="card-name">Raw Denim V2</div>
+                <div class="card-colorway">Raw Indigo</div>
+                <div class="card-price">350,000 VND</div>
+              </div>
+            </div>
+
+          </div><!-- /track -->
+        </div><!-- /track-wrap -->
+      </div><!-- /carousel -->
+
+      <!-- bottom: sizes + buy -->
+      <div class="left-bottom">
+        <div class="selected-name" id="sel-name">Raw Denim V2 — Light Wash</div>
+        <span class="selected-color" id="sel-color">350,000 VND</span>
+
+        <div class="size-row">
+          <button class="size-btn" onclick="selectSize(this)">M</button>
+          <button class="size-btn selected" onclick="selectSize(this)">L</button>
+          <button class="size-btn" onclick="selectSize(this)">XL</button>
+        </div>
+
+        <a class="buy-btn" id="buy-btn"
+           href="https://hardyboys.vn/ao-khoac-jeans-nam-boxy-hdb-raw-denim-jacket-v1/"
+           target="_blank" rel="noopener">
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <path d="M16 10a4 4 0 01-8 0"/>
+          </svg>
+          Add to Cart
+        </a>
+      </div>
+
+    </div><!-- /left-panel -->
+
+    <!-- ═══ RIGHT PANEL ═══ -->
+    <div class="right-panel" id="right-panel">
+
+      <div class="bg-grid"></div>
+      <div class="bg-number">006</div>
+
+      <!-- colorway badge -->
+      <div class="colorway-badge">
+        <span class="colorway-badge-label">Selected</span>
+        <span class="colorway-badge-value" id="badge-color">Light Wash</span>
+        <div class="colorway-swatch" id="color-swatch" style="background:#d4c9b0;"></div>
+      </div>
+
+      <!-- index dots -->
+      <div class="index-dots" id="index-dots">
+        <div class="index-dot active" onclick="selectCard(0)"></div>
+        <div class="index-dot" onclick="selectCard(1)"></div>
+        <div class="index-dot" onclick="selectCard(2)"></div>
+      </div>
+
+      <!-- model -->
+      <video id="model-video" autoplay muted loop playsinline>
+        <source src="model-spin.mp4" type="video/mp4" />
+      </video>
+
+      <div class="model-base">
+        <div class="base-line"></div>
+        <div class="base-glow" id="base-glow"></div>
+      </div>
+
+      <div class="key-hint">← → Arrow keys or scroll to change colorway</div>
+
+    </div><!-- /right-panel -->
+
+  </div><!-- /layout -->
+
+  <script>
+    // ── cursor ──
+    const dot  = document.getElementById('cdot');
+    const ring = document.getElementById('cring');
+    let mx = 0, my = 0;
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      dot.style.left = mx + 'px'; dot.style.top = my + 'px';
+    });
+    setInterval(() => { ring.style.left = mx + 'px'; ring.style.top = my + 'px'; }, 16);
+
+    // ── data ──
+    const cards   = Array.from(document.querySelectorAll('.jacket-card'));
+    const total   = cards.length;
+    let current   = 0;
+
+    const video      = document.getElementById('model-video');
+    const rightPanel = document.getElementById('right-panel');
+    const selName    = document.getElementById('sel-name');
+    const selColor   = document.getElementById('sel-color');
+    const buyBtn     = document.getElementById('buy-btn');
+    const badgeColor = document.getElementById('badge-color');
+    const swatch     = document.getElementById('color-swatch');
+    const btnPrev    = document.getElementById('btn-prev');
+    const btnNext    = document.getElementById('btn-next');
+    const dots       = document.querySelectorAll('.index-dot');
+
+    function spinModel() {
+      video.classList.remove('spinning');
+      void video.offsetWidth;
+      video.classList.add('spinning');
+      rightPanel.classList.add('active');
+      setTimeout(() => rightPanel.classList.remove('active'), 900);
+    }
+
+    function selectCard(i) {
+      current = i;
+
+      // update card active state
+      cards.forEach((c, idx) => c.classList.toggle('active', idx === i));
+
+      // dots
+      dots.forEach((d, idx) => d.classList.toggle('active', idx === i));
+
+      // nav buttons
+      btnPrev.disabled = (i === 0);
+      btnNext.disabled = (i === total - 1);
+
+      // update right panel info
+      const sold = card.dataset.soldout === 'true';
+      badgeColor.textContent = card.dataset.color;
+      swatch.style.background = card.dataset.swatch;
+
+      // update left bottom
+      selName.textContent  = card.dataset.name + ' — ' + card.dataset.color;
+      selColor.textContent = sold ? '● Sold Out' : card.dataset.price;
+      selColor.style.color = sold ? '#c0392b' : 'var(--gold)';
+
+      // buy button
+      if (sold) {
+        buyBtn.classList.add('disabled');
+        buyBtn.removeAttribute('href');
+      } else {
+        buyBtn.classList.remove('disabled');
+        buyBtn.href = card.dataset.link;
+      }
+
+      spinModel();
+    }
+
+    function navigate(dir) {
+      const next = Math.max(0, Math.min(total - 1, current + dir));
+      if (next !== current) selectCard(next);
+    }
+
+    // keyboard arrows
+    document.addEventListener('keydown', e => {
+      if (e.key === 'ArrowDown' || e.key === 'ArrowRight') { e.preventDefault(); navigate(1); }
+      if (e.key === 'ArrowUp'   || e.key === 'ArrowLeft')  { e.preventDefault(); navigate(-1); }
+    });
+
+    // scroll wheel on right panel
+    let scrollLocked = false;
+    document.getElementById('right-panel').addEventListener('wheel', e => {
+      e.preventDefault();
+      if (scrollLocked) return;
+      scrollLocked = true;
+      navigate(e.deltaY > 0 ? 1 : -1);
+      setTimeout(() => scrollLocked = false, 700);
+    }, { passive: false });
+
+    // scroll wheel on left panel too
+    document.querySelector('.carousel-track-wrap').addEventListener('wheel', e => {
+      e.preventDefault();
+      if (scrollLocked) return;
+      scrollLocked = true;
+      navigate(e.deltaY > 0 ? 1 : -1);
+      setTimeout(() => scrollLocked = false, 700);
+    }, { passive: false });
+
+    // size select
+    function selectSize(btn) {
+      document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+    }
+
+    // remove spinning class when done
+    video.addEventListener('animationend', () => video.classList.remove('spinning'));
+
+    // init
+    selectCard(0);
+    // don't spin on load
+    video.classList.remove('spinning');
+    rightPanel.classList.remove('active');
+  </script>
+
+</body>
+</html>
