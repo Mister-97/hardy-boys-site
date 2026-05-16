@@ -1092,7 +1092,6 @@ function transitionTo(target) {
 
       // step 1: bars slide IN (close)
       bars.forEach(b => { b.classList.remove('slide-out'); b.classList.add('slide-in'); });
-      showSpin();
 
       const closeTime = 55 * 8 + 550; // last bar delay + duration
 
@@ -1125,7 +1124,6 @@ function transitionTo(target) {
 
         // step 3: bars slide OUT (open)
         bars.forEach(b => { b.classList.remove('slide-in'); b.classList.add('slide-out'); });
-        hideSpin();
 
         setTimeout(() => {
           wrap.style.pointerEvents = 'none';
@@ -1140,7 +1138,6 @@ function transitionTo(target) {
       wrap.style.pointerEvents = 'all';
 
       bars.forEach(b => { b.classList.remove('slide-out'); b.classList.add('slide-in'); });
-      showSpin();
 
       const closeTime = 55 * 8 + 550;
       setTimeout(() => {
@@ -1149,7 +1146,6 @@ function transitionTo(target) {
         bgVideo.style.display = 'block';
 
         bars.forEach(b => { b.classList.remove('slide-in'); b.classList.add('slide-out'); });
-        hideSpin();
         setTimeout(() => { wrap.style.pointerEvents = 'none'; }, 30 * 8 + 500);
       }, closeTime);
     }
