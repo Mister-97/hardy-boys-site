@@ -617,6 +617,11 @@
     <div class="loading-bar"></div>
   </div>
 
+  <!-- ── SPIN LOGO OVERLAY (shown during transition) ── -->
+  <div id="spin-overlay" style="position:fixed;inset:0;z-index:501;pointer-events:none;display:none;align-items:center;justify-content:center;">
+    <video id="spin-video" src="logo-spin.mp4" muted playsinline style="width:140px;height:140px;object-fit:contain;"></video>
+  </div>
+
   <!-- ── VENETIAN BLIND TRANSITION ── -->
   <div id="transition-wrap" style="position:fixed;inset:0;z-index:500;pointer-events:none;display:flex;flex-direction:column;">
     <div class="blind-bar" style="--i:0;"></div>
@@ -1086,12 +1091,29 @@
     const mainUI    = document.getElementById('ui');
     const bgVideo   = document.getElementById('bg-video');
 
+    const spinOverlay = document.getElementById('spin-overlay');
+    const spinVideo   = document.getElementById('spin-video');
+
+    function showSpin() {
+      setTimeout(() => {
+        spinOverlay.style.display = 'flex';
+        spinVideo.currentTime = 0;
+        spinVideo.play();
+      }, 450);
+    }
+    function hideSpin() {
+      spinVideo.pause();
+      spinVideo.currentTime = 0;
+      spinOverlay.style.display = 'none';
+    }
+
     function transitionTo(target) {
       const wrap = document.getElementById('transition-wrap');
       wrap.style.pointerEvents = 'all';
 
       // step 1: bars slide IN (close)
       bars.forEach(b => { b.classList.remove('slide-out'); b.classList.add('slide-in'); });
+      showSpin();
 
       const closeTime = 55 * 8 + 550; // last bar delay + duration
 
@@ -1124,6 +1146,7 @@
 
         // step 3: bars slide OUT (open)
         bars.forEach(b => { b.classList.remove('slide-in'); b.classList.add('slide-out'); });
+        hideSpin();
 
         setTimeout(() => {
           wrap.style.pointerEvents = 'none';
@@ -1138,6 +1161,7 @@
       wrap.style.pointerEvents = 'all';
 
       bars.forEach(b => { b.classList.remove('slide-out'); b.classList.add('slide-in'); });
+      showSpin();
 
       const closeTime = 55 * 8 + 550;
       setTimeout(() => {
@@ -1146,6 +1170,7 @@
         bgVideo.style.display = 'block';
 
         bars.forEach(b => { b.classList.remove('slide-in'); b.classList.add('slide-out'); });
+        hideSpin();
         setTimeout(() => { wrap.style.pointerEvents = 'none'; }, 30 * 8 + 500);
       }, closeTime);
     }
