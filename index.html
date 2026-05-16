@@ -355,6 +355,145 @@
     .menu-item:focus { outline: none; }
     .menu-item:focus .menu-item-text { color: #F0EAD8; }
 
+    /* ══ MOBILE ══════════════════════════════════════════════════════════ */
+    @media (max-width: 768px) {
+
+      /* ── landing ── */
+      #ui {
+        padding: 1.25rem 1.5rem;
+        padding-top: 22vh;
+        justify-content: flex-start;
+      }
+      .game-title { font-size: clamp(2.8rem, 13vw, 4.5rem); }
+
+      /* logo: top center */
+      .corner-emblem {
+        top: 1.2rem;
+        right: unset;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      .corner-emblem img { width: 72px; }
+
+      /* crosshair: smaller + shifted left on mobile */
+      #crosshair-aim {
+        width: 4.2rem !important;
+        height: 4.2rem !important;
+        left: 4.5rem !important;
+        top: -1.5rem !important;
+      }
+
+      /* hide custom cursor on mobile */
+      #cursor-dot, #cursor-ring { display: none !important; }
+
+      .bottom-strip { display: none; }
+      .press-prompt { font-size: .52rem; letter-spacing: .15em; }
+
+      /* ── shop page: light, matches desktop ── */
+      #shop-page {
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch;
+        background: #f5f2ed !important;
+      }
+      #shop-page > .sp-flex {
+        flex-direction: column !important;
+        height: auto !important;
+        overflow: visible !important;
+      }
+
+      /* hide desktop store menu panel */
+      #sp-menu { display: none !important; }
+
+      /* mobile shop header */
+      #mobile-shop-header {
+        display: flex !important;
+        background: #f5f2ed !important;
+        border-bottom: 1px solid rgba(0,0,0,.08) !important;
+      }
+      #mobile-back { color: rgba(140,100,40,.7) !important; }
+      #mobile-shop-header span { color: rgba(26,23,20,.25) !important; }
+
+      /* image stage FIRST — full width, tall */
+      #img-stage {
+        order: 1;
+        width: 100% !important;
+        flex: none !important;
+        height: 92vw !important;
+        min-height: 320px !important;
+        max-height: 520px !important;
+        border-right: none !important;
+        border-bottom: 1px solid rgba(0,0,0,.08) !important;
+        background: #e8e4dd !important;
+      }
+
+      /* horizontal slider */
+      #img-slider {
+        flex-direction: row !important;
+        width: max-content !important;
+      }
+      .img-slide {
+        width: 100vw !important;
+        height: 92vw !important;
+        min-height: 320px !important;
+        max-height: 520px !important;
+        flex-shrink: 0 !important;
+      }
+
+      /* dots: horizontal bottom-center */
+      #img-dots {
+        right: unset !important;
+        top: unset !important;
+        bottom: .8rem !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        flex-direction: row !important;
+        gap: .4rem !important;
+      }
+
+      /* info panel: second */
+      #sp-info {
+        order: 2;
+        width: 100% !important;
+        min-width: 0 !important;
+        border-right: none !important;
+        border-bottom: 1px solid rgba(0,0,0,.08) !important;
+        flex-shrink: 0 !important;
+        background: #f5f2ed !important;
+      }
+      #sp-info > div { min-width: 0 !important; }
+      #sp-info > div > div { padding: 1.5rem 1.5rem 1.8rem !important; }
+
+      /* hide verbose details by default on mobile — show after tap */
+      #sp-details {
+        max-height: 0 !important;
+        overflow: hidden !important;
+        opacity: 0 !important;
+      }
+      #sp-details.mobile-open {
+        max-height: 600px !important;
+        opacity: 1 !important;
+      }
+
+      /* hide info-level back button on mobile */
+      #sp-info-back { display: none !important; }
+
+      /* show quick links on mobile */
+      #mobile-quick-links { display: flex !important; }
+
+      /* hide full purchase panel on mobile — replaced by sticky bar */
+      #sp-purchase { display: none !important; }
+
+      /* sticky buy bar */
+      #mobile-buy-bar { display: flex !important; }
+      #shop-page { padding-bottom: 90px; }
+
+      .mob-size {
+        padding: .3rem .6rem !important;
+        font-size: .58rem !important;
+      }
+    }
+    /* ══ END MOBILE ══════════════════════════════════════════════════════ */
+
     .footer-link {
       font-family: 'Montserrat', sans-serif;
       font-weight: 600;
@@ -493,8 +632,84 @@
   <!-- ── PRODUCT PAGE ── -->
   <div id="shop-page" style="position:fixed;inset:0;z-index:400;background:#f5f2ed;display:none;overflow:hidden;">
 
+    <!-- mobile header (hidden on desktop) -->
+    <div id="mobile-shop-header" style="display:none;position:sticky;top:0;z-index:20;background:#f5f2ed;border-bottom:1px solid rgba(0,0,0,.08);padding:.85rem 1.25rem;align-items:center;justify-content:space-between;">
+      <button id="mobile-back" style="display:inline-flex;align-items:center;gap:.5rem;background:none;border:none;cursor:pointer;font-family:'Montserrat',sans-serif;font-weight:700;font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(140,100,40,.7);padding:0;">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        Back
+      </button>
+      <span style="font-family:'Montserrat',sans-serif;font-size:.52rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:rgba(26,23,20,.25);position:absolute;left:50%;transform:translateX(-50%);">Hardy Boys</span>
+      <button id="mobile-hamburger" style="display:inline-flex;flex-direction:column;gap:4px;background:none;border:none;cursor:pointer;padding:4px;">
+        <span style="display:block;width:20px;height:2px;background:#1a1714;transition:all .25s;"></span>
+        <span style="display:block;width:20px;height:2px;background:#1a1714;transition:all .25s;"></span>
+        <span style="display:block;width:14px;height:2px;background:#1a1714;transition:all .25s;"></span>
+      </button>
+    </div>
+
+    <!-- mobile sticky buy bar -->
+    <div id="mobile-buy-bar" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:50;background:#f5f2ed;border-top:1px solid rgba(0,0,0,.1);padding:.9rem 1.25rem;gap:.75rem;align-items:center;">
+      <div style="flex:1;">
+        <p style="font-family:'Montserrat',sans-serif;font-weight:900;font-size:1.2rem;color:#1a1714;letter-spacing:-.02em;line-height:1;"><span id="mobile-price">350,000</span><span style="font-size:.7rem;font-weight:500;color:rgba(26,23,20,.35);margin-left:.25rem;">VND</span></p>
+        <div style="display:flex;gap:.4rem;margin-top:.5rem;">
+          <button class="size-btn mob-size" onclick="selectSize(this)">M</button>
+          <button class="size-btn mob-size" onclick="selectSize(this)">L</button>
+          <button class="size-btn mob-size" onclick="selectSize(this)">XL</button>
+        </div>
+      </div>
+      <a id="mobile-cart-btn" href="https://hardyboys.vn/ao-khoac-jeans-nam-boxy-hdb-raw-denim-jacket-v1/" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;gap:.5rem;padding:.85rem 1.4rem;background:#1a1714;color:#f5f2ed;font-family:'Montserrat',sans-serif;font-weight:800;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;white-space:nowrap;">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        Add to Cart
+      </a>
+    </div>
+
+    <!-- mobile category drawer -->
+    <div id="mobile-drawer" style="display:none;position:fixed;inset:0;z-index:100;">
+      <!-- backdrop -->
+      <div id="mobile-drawer-backdrop" onclick="closeDrawer()" style="position:absolute;inset:0;background:rgba(0,0,0,.4);"></div>
+      <!-- panel -->
+      <div style="position:absolute;top:0;right:0;bottom:0;width:75%;max-width:300px;background:#f5f2ed;overflow-y:auto;transform:translateX(100%);transition:transform .35s cubic-bezier(.77,0,.18,1);" id="mobile-drawer-panel">
+        <div style="padding:1.5rem 1.5rem 1rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(0,0,0,.07);">
+          <span style="font-family:'Montserrat',sans-serif;font-size:.55rem;font-weight:900;letter-spacing:.3em;text-transform:uppercase;color:#1a1714;">Shop</span>
+          <button onclick="closeDrawer()" style="background:none;border:none;cursor:pointer;color:rgba(26,23,20,.4);padding:2px;">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+        <div style="padding:1.2rem 1.5rem;">
+          <div style="margin-bottom:1.8rem;">
+            <p style="font-family:'Montserrat',sans-serif;font-size:.52rem;font-weight:900;letter-spacing:.35em;text-transform:uppercase;color:#1a1714;padding-bottom:.5rem;border-bottom:1.5px solid #1a1714;margin-bottom:.7rem;">Tops</p>
+            <button class="sp-menu-item">T-Shirts</button>
+            <button class="sp-menu-item">SlimFit Tees</button>
+            <button class="sp-menu-item">Polo Shirts</button>
+            <button class="sp-menu-item">Hoodies</button>
+            <button class="sp-menu-item">Zip Hoodies</button>
+            <button class="sp-menu-item">Tanktops</button>
+          </div>
+          <div style="margin-bottom:1.8rem;">
+            <p style="font-family:'Montserrat',sans-serif;font-size:.52rem;font-weight:900;letter-spacing:.35em;text-transform:uppercase;color:#1a1714;padding-bottom:.5rem;border-bottom:1.5px solid #1a1714;margin-bottom:.7rem;">Bottoms</p>
+            <button class="sp-menu-item">Denim Jeans</button>
+            <button class="sp-menu-item">Double Knee</button>
+            <button class="sp-menu-item">Shorts</button>
+            <button class="sp-menu-item">Jorts</button>
+            <button class="sp-menu-item">Sweatpants</button>
+          </div>
+          <div style="margin-bottom:1.8rem;">
+            <p style="font-family:'Montserrat',sans-serif;font-size:.52rem;font-weight:900;letter-spacing:.35em;text-transform:uppercase;color:#1a1714;padding-bottom:.5rem;border-bottom:1.5px solid #1a1714;margin-bottom:.7rem;">Outerwear</p>
+            <button class="sp-menu-item sp-menu-active">Denim Jackets</button>
+            <button class="sp-menu-item">Canvas Jackets</button>
+            <button class="sp-menu-item">Gilets / Vests</button>
+          </div>
+          <div>
+            <p style="font-family:'Montserrat',sans-serif;font-size:.52rem;font-weight:900;letter-spacing:.35em;text-transform:uppercase;color:#1a1714;padding-bottom:.5rem;border-bottom:1.5px solid #1a1714;margin-bottom:.7rem;">Accessories</p>
+            <button class="sp-menu-item">Caps & Hats</button>
+            <button class="sp-menu-item">Socks</button>
+            <button class="sp-menu-item">Underwear</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- 4-panel flex layout -->
-    <div style="position:relative;z-index:2;display:flex;height:100vh;overflow:hidden;">
+    <div class="sp-flex" style="position:relative;z-index:2;display:flex;height:100vh;overflow:hidden;">
 
       <!-- ══ PANEL 0: STORE MENU ══ -->
       <div id="sp-menu" style="width:320px;min-width:320px;flex-shrink:0;border-right:1px solid rgba(0,0,0,.08);background:#f5f2ed;display:flex;flex-direction:column;overflow:hidden;transition:width .6s cubic-bezier(.77,0,.18,1),min-width .6s cubic-bezier(.77,0,.18,1),opacity .35s ease;">
@@ -570,6 +785,18 @@
               </ul>
               <p id="cw-desc" style="font-family:'Montserrat',sans-serif;font-size:.75rem;color:rgba(26,23,20,.4);line-height:1.8;letter-spacing:.02em;transition:opacity .25s;">Washed-out sage tones with a lived-in feel. Classic boxy cut with dual chest pockets and tonal stitching. Breaks in beautifully over time. Every wear makes it yours.</p>
             </div>
+          </div>
+
+          <!-- Mobile-only: size guide + shipping links -->
+          <div id="mobile-quick-links" style="display:none;gap:1.2rem;margin-bottom:1.2rem;">
+            <a href="https://hardyboys.vn/size-guide" target="_blank" rel="noopener" style="font-family:'Montserrat',sans-serif;font-weight:600;font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(26,23,20,.35);text-decoration:none;display:flex;align-items:center;gap:.4rem;">
+              <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
+              Size Guide
+            </a>
+            <a href="https://hardyboys.vn/support/" target="_blank" rel="noopener" style="font-family:'Montserrat',sans-serif;font-weight:600;font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(26,23,20,.35);text-decoration:none;display:flex;align-items:center;gap:.4rem;">
+              <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 7H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+              Shipping & Returns →
+            </a>
           </div>
 
           <!-- Colorway label row -->
@@ -762,7 +989,8 @@
       font-size: .7rem;
     }
     .sp-menu-item:hover::before { opacity: 1; }
-    .sp-menu-item.sp-menu-active { color: #1a1714; font-weight: 700; }
+    .sp-menu-item.sp-menu-active { color: #1a1714; font-weight: 700; padding-left: .8rem; }
+    .sp-menu-item.sp-menu-active::before { opacity: 1; }
 
     /* ── colorway grid ── */
     .cw-card {
@@ -813,32 +1041,40 @@
   </style>
 
   <script>
-    // custom gold cursor
-    const dot = document.createElement('div');
-    dot.style.cssText = 'position:fixed;top:0;left:0;width:6px;height:6px;background:#C8A96E;border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);transition:width .18s,height .18s,opacity .18s,background .18s;will-change:left,top;';
-    document.body.appendChild(dot);
+    // ── helpers ──
+    const isMobile = () => window.innerWidth <= 768;
+    const isTouch  = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
 
-    const ring = document.createElement('div');
-    ring.style.cssText = 'position:fixed;top:0;left:0;width:28px;height:28px;border:1px solid rgba(200,169,110,.35);border-radius:50%;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:left .12s ease,top .12s ease,width .2s,height .2s,opacity .2s;will-change:left,top;';
-    document.body.appendChild(ring);
+    // custom gold cursor — desktop/mouse only
+    if (!isTouch) {
+      const dot = document.createElement('div');
+      dot.id = 'cursor-dot';
+      dot.style.cssText = 'position:fixed;top:0;left:0;width:6px;height:6px;background:#C8A96E;border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);transition:width .18s,height .18s,opacity .18s,background .18s;will-change:left,top;';
+      document.body.appendChild(dot);
 
-    let mx = 0, my = 0;
-    document.addEventListener('mousemove', e => {
-      mx = e.clientX; my = e.clientY;
-      dot.style.left  = mx + 'px'; dot.style.top  = my + 'px';
-    });
-    setInterval(() => { ring.style.left = mx + 'px'; ring.style.top = my + 'px'; }, 16);
+      const ring = document.createElement('div');
+      ring.id = 'cursor-ring';
+      ring.style.cssText = 'position:fixed;top:0;left:0;width:28px;height:28px;border:1px solid rgba(200,169,110,.35);border-radius:50%;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:left .12s ease,top .12s ease,width .2s,height .2s,opacity .2s;will-change:left,top;';
+      document.body.appendChild(ring);
 
-    document.querySelectorAll('.menu-item').forEach(el => {
-      el.addEventListener('mouseenter', () => {
-        dot.style.width='10px'; dot.style.height='10px'; dot.style.background='#F0EAD8';
-        ring.style.width='44px'; ring.style.height='44px'; ring.style.opacity='.6';
+      let mx = 0, my = 0;
+      document.addEventListener('mousemove', e => {
+        mx = e.clientX; my = e.clientY;
+        dot.style.left = mx + 'px'; dot.style.top = my + 'px';
       });
-      el.addEventListener('mouseleave', () => {
-        dot.style.width='6px'; dot.style.height='6px'; dot.style.background='#C8A96E';
-        ring.style.width='28px'; ring.style.height='28px'; ring.style.opacity='1';
+      setInterval(() => { ring.style.left = mx + 'px'; ring.style.top = my + 'px'; }, 16);
+
+      document.querySelectorAll('.menu-item').forEach(el => {
+        el.addEventListener('mouseenter', () => {
+          dot.style.width='10px'; dot.style.height='10px'; dot.style.background='#F0EAD8';
+          ring.style.width='44px'; ring.style.height='44px'; ring.style.opacity='.6';
+        });
+        el.addEventListener('mouseleave', () => {
+          dot.style.width='6px'; dot.style.height='6px'; dot.style.background='#C8A96E';
+          ring.style.width='28px'; ring.style.height='28px'; ring.style.opacity='1';
+        });
       });
-    });
+    }
 
     document.addEventListener('keydown', () => {
       document.querySelector('.press-prompt').style.opacity = '0';
@@ -871,15 +1107,19 @@
           const purchase = document.getElementById('sp-purchase');
           const details  = document.getElementById('sp-details');
           const infoBack = document.getElementById('sp-info-back');
-          menu.style.width = '320px'; menu.style.minWidth = '320px'; menu.style.opacity = '1';
-          purchase.style.width = '0'; purchase.style.minWidth = '0'; purchase.style.opacity = '0';
-          details.style.maxHeight = '0'; details.style.opacity = '0';
-          infoBack.style.display = 'none';
+          if (!isMobile()) {
+            menu.style.width = '320px'; menu.style.minWidth = '320px'; menu.style.opacity = '1';
+            purchase.style.width = '0'; purchase.style.minWidth = '0'; purchase.style.opacity = '0';
+            details.style.maxHeight = '0'; details.style.opacity = '0';
+            infoBack.style.display = 'none';
+          }
           document.querySelectorAll('.cw-card').forEach(c => c.classList.remove('active'));
           document.getElementById('cw-label').textContent = '—';
           buildSlider(defaultImages);
           detailsOpen = false;
           shopState = 'menu';
+          // scroll shop page to top on mobile
+          if (isMobile()) document.getElementById('shop-page').scrollTop = 0;
         }
 
         // step 3: bars slide OUT (open)
@@ -947,18 +1187,54 @@
       dotsEl.innerHTML = images.map((_, i) =>
         `<div class="img-dot${i === 0 ? ' active' : ''}" onclick="goImg(${i})"></div>`
       ).join('');
-      slider.style.transform = 'translateY(0)';
+      slider.style.transform = isMobile() ? 'translateX(0)' : 'translateY(0)';
     }
 
     function goImg(i) {
       const allDots = document.querySelectorAll('.img-dot');
       imgIndex = Math.max(0, Math.min(i, allDots.length - 1));
-      slider.style.transform = 'translateY(' + (-imgIndex * 100) + 'vh)';
+      if (isMobile()) {
+        const stageW = document.getElementById('img-stage').offsetWidth;
+        slider.style.transform = 'translateX(' + (-imgIndex * stageW) + 'px)';
+      } else {
+        slider.style.transform = 'translateY(' + (-imgIndex * 100) + 'vh)';
+      }
       allDots.forEach((d, idx) => d.classList.toggle('active', idx === imgIndex));
     }
 
+    window.addEventListener('resize', () => goImg(imgIndex));
+
     function nextImg() { goImg(imgIndex + 1); }
     function prevImg() { goImg(imgIndex - 1); }
+
+    // touch swipe on image stage
+    let touchStartX = 0, touchStartY = 0, touchLocked = false;
+    const imgStageEl = document.getElementById('img-stage');
+    imgStageEl.addEventListener('touchstart', e => {
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+      touchLocked = false;
+    }, { passive: true });
+    imgStageEl.addEventListener('touchmove', e => {
+      if (!isMobile()) return;
+      const dx = Math.abs(e.touches[0].clientX - touchStartX);
+      const dy = Math.abs(e.touches[0].clientY - touchStartY);
+      // if swiping more horizontally, block page scroll
+      if (dx > dy) e.preventDefault();
+    }, { passive: false });
+    imgStageEl.addEventListener('touchend', e => {
+      const dx = e.changedTouches[0].clientX - touchStartX;
+      const dy = e.changedTouches[0].clientY - touchStartY;
+      if (isMobile()) {
+        if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
+          if (dx < 0) nextImg(); else prevImg();
+        }
+      } else {
+        if (Math.abs(dy) > 40 && Math.abs(dy) > Math.abs(dx)) {
+          if (dy < 0) nextImg(); else prevImg();
+        }
+      }
+    }, { passive: true });
 
     buildSlider(defaultImages);
 
@@ -972,6 +1248,11 @@
     let detailsOpen = false;
 
     function openProductPanel() {
+      if (isMobile()) {
+        // on mobile panels are always full-width stacked — nothing to animate
+        shopState = 'product';
+        return;
+      }
       const menu     = document.getElementById('sp-menu');
       const purchase = document.getElementById('sp-purchase');
       const infoBack = document.getElementById('sp-info-back');
@@ -982,17 +1263,8 @@
     }
 
     function closeProductPanel() {
-      const menu     = document.getElementById('sp-menu');
-      const purchase = document.getElementById('sp-purchase');
       const details  = document.getElementById('sp-details');
-      const infoBack = document.getElementById('sp-info-back');
-      // revert columns
-      menu.style.width = '320px'; menu.style.minWidth = '320px'; menu.style.opacity = '1';
-      purchase.style.width = '0'; purchase.style.minWidth = '0'; purchase.style.opacity = '0';
-      infoBack.style.display = 'none';
-      // collapse details
-      details.style.maxHeight = '0'; details.style.opacity = '0';
-      // clear selections
+      // clear selections & reset slider
       document.querySelectorAll('.cw-card').forEach(c => c.classList.remove('active'));
       document.getElementById('cw-label').textContent = '—';
       buildSlider(defaultImages);
@@ -1000,6 +1272,16 @@
       document.getElementById('product-price').textContent = colorwayData['Laser Washed'].price;
       detailsOpen = false;
       shopState = 'menu';
+
+      if (isMobile()) return; // on mobile panels stay stacked
+
+      const menu     = document.getElementById('sp-menu');
+      const purchase = document.getElementById('sp-purchase');
+      const infoBack = document.getElementById('sp-info-back');
+      menu.style.width = '320px'; menu.style.minWidth = '320px'; menu.style.opacity = '1';
+      purchase.style.width = '0'; purchase.style.minWidth = '0'; purchase.style.opacity = '0';
+      infoBack.style.display = 'none';
+      details.style.maxHeight = '0'; details.style.opacity = '0';
     }
 
     function selectColorway(card, name, desc) {
@@ -1027,20 +1309,26 @@
         buildSlider(cwd.images);
         document.getElementById('product-name').textContent = cwd.name;
         document.getElementById('product-price').textContent = cwd.price;
+        const mobilePrice = document.getElementById('mobile-price');
+        if (mobilePrice) mobilePrice.textContent = cwd.price;
       } else {
         buildSlider(defaultImages);
       }
 
       // expand details
-      details.style.maxHeight = '500px';
-      details.style.opacity = '1';
+      if (isMobile()) {
+        details.classList.add('mobile-open');
+      } else {
+        details.style.maxHeight = '500px';
+        details.style.opacity = '1';
+      }
       detailsOpen = true;
 
       // trigger column slide if not already done
       if (shopState !== 'product') openProductPanel();
     }
 
-    // left-panel back button (menu state → landing)
+    // left-panel back button (desktop)
     document.getElementById('shop-back').addEventListener('click', function() {
       if (shopState === 'product') {
         closeProductPanel();
@@ -1049,14 +1337,34 @@
       }
     });
 
-    // scroll wheel on the image stage — throttled to one slide per scroll
+    // mobile back button
+    document.getElementById('mobile-back').addEventListener('click', function() {
+      transitionBack();
+    });
+
+    // mobile hamburger drawer
+    function openDrawer() {
+      const drawer = document.getElementById('mobile-drawer');
+      const panel  = document.getElementById('mobile-drawer-panel');
+      drawer.style.display = 'block';
+      requestAnimationFrame(() => { panel.style.transform = 'translateX(0)'; });
+    }
+    function closeDrawer() {
+      const panel = document.getElementById('mobile-drawer-panel');
+      panel.style.transform = 'translateX(100%)';
+      setTimeout(() => { document.getElementById('mobile-drawer').style.display = 'none'; }, 350);
+    }
+    document.getElementById('mobile-hamburger').addEventListener('click', openDrawer);
+
+    // scroll wheel on the image stage — desktop only, mobile uses touch swipe
     let scrollLocked = false;
     document.getElementById('img-stage').addEventListener('wheel', e => {
+      if (isMobile()) return;
       e.preventDefault();
       if (scrollLocked) return;
       scrollLocked = true;
       if (e.deltaY > 0) nextImg(); else prevImg();
-      setTimeout(() => { scrollLocked = false; }, 650); // match transition duration
+      setTimeout(() => { scrollLocked = false; }, 650);
     }, { passive: false });
   </script>
 
