@@ -617,12 +617,7 @@
     <div class="loading-bar"></div>
   </div>
 
-  <!-- ── SPIN LOGO OVERLAY (shown during transition) ── -->
-  <div id="spin-overlay" style="position:fixed;inset:0;z-index:501;pointer-events:none;display:none;align-items:center;justify-content:center;">
-    <video id="spin-video" src="logo-spin.mp4" muted playsinline style="width:140px;height:140px;object-fit:contain;"></video>
-  </div>
-
-  <!-- ── VENETIAN BLIND TRANSITION ── -->
+<!-- ── VENETIAN BLIND TRANSITION ── -->
   <div id="transition-wrap" style="position:fixed;inset:0;z-index:500;pointer-events:none;display:flex;flex-direction:column;">
     <div class="blind-bar" style="--i:0;"></div>
     <div class="blind-bar" style="--i:1;"></div>
@@ -1091,23 +1086,7 @@
     const mainUI    = document.getElementById('ui');
     const bgVideo   = document.getElementById('bg-video');
 
-    const spinOverlay = document.getElementById('spin-overlay');
-    const spinVideo   = document.getElementById('spin-video');
-
-    function showSpin() {
-      setTimeout(() => {
-        spinOverlay.style.display = 'flex';
-        spinVideo.currentTime = 0;
-        spinVideo.play();
-      }, 450);
-    }
-    function hideSpin() {
-      spinVideo.pause();
-      spinVideo.currentTime = 0;
-      spinOverlay.style.display = 'none';
-    }
-
-    function transitionTo(target) {
+function transitionTo(target) {
       const wrap = document.getElementById('transition-wrap');
       wrap.style.pointerEvents = 'all';
 
